@@ -1,12 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 // Sayfayı dinamik yap
 export const dynamic = 'force-dynamic';
 
-export default function PaymentStatus() {
+// Loading component
+function Loading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+}
+
+// Main content component
+function PaymentStatusContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   // Timer state
@@ -114,5 +124,14 @@ export default function PaymentStatus() {
         </button>
       </div>
     </main>
+  );
+}
+
+// Export default component with Suspense
+export default function PaymentStatus() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <PaymentStatusContent />
+    </Suspense>
   );
 } 
