@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 // Kripto para listesi ve oranları
@@ -29,7 +29,7 @@ const cryptoRates = {
 
 type CryptoSymbol = keyof typeof cryptoRates;
 
-export default function BuyToken() {
+function BuyTokenContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -759,5 +759,13 @@ export default function BuyToken() {
       {showPaymentDialog && <PaymentDialog />}
       {showWaitingDialog && <WaitingDialog />}
     </div>
+  );
+}
+
+export default function BuyToken() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BuyTokenContent />
+    </Suspense>
   );
 } 
