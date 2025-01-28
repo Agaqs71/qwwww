@@ -1,24 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 // Sayfayı dinamik yap
 export const dynamic = 'force-dynamic';
 
 export default function PaymentStatus() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   // Timer state
   const [timeRemaining, setTimeRemaining] = useState<number>(60 * 60); // 60 minutes
 
   useEffect(() => {
     // URL'den parametreleri al
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get('orderId');
-    const cryptoAmount = urlParams.get('cryptoAmount');
-    const cryptoSymbol = urlParams.get('cryptoSymbol');
-    const address = urlParams.get('address');
-    const tokenAmount = urlParams.get('tokenAmount');
-    const bonusAmount = urlParams.get('bonusAmount');
-    const totalAmount = urlParams.get('totalAmount');
+    const orderId = searchParams.get('orderId');
+    const cryptoAmount = searchParams.get('cryptoAmount');
+    const cryptoSymbol = searchParams.get('cryptoSymbol');
+    const address = searchParams.get('address');
+    const tokenAmount = searchParams.get('tokenAmount');
+    const bonusAmount = searchParams.get('bonusAmount');
+    const totalAmount = searchParams.get('totalAmount');
 
     // Timer'ı başlat
     const interval = setInterval(() => {
@@ -32,7 +34,7 @@ export default function PaymentStatus() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [searchParams]);
 
   // Timer formatı
   const minutes = Math.floor(timeRemaining / 60);
@@ -56,7 +58,7 @@ export default function PaymentStatus() {
         <h1 className="text-3xl font-bold">Waiting for Payment</h1>
 
         <div className="text-gray-400 max-w-md">
-          <p>Order <span className="text-blue-400" id="order-id">{new URLSearchParams(window.location.search).get('orderId')}</span> is being processed..</p>
+          <p>Order <span className="text-blue-400" id="order-id">{searchParams.get('orderId')}</span> is being processed..</p>
           <p className="mt-2">If payment has not been completed, please do so at your earliest convenience.</p>
           <p className="mt-2">If you have already made the payment, please wait while we process your transaction.</p>
         </div>
@@ -66,35 +68,35 @@ export default function PaymentStatus() {
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Amount:</span>
               <span className="font-mono font-bold">
-                {new URLSearchParams(window.location.search).get('cryptoAmount')} {new URLSearchParams(window.location.search).get('cryptoSymbol')}
+                {searchParams.get('cryptoAmount')} {searchParams.get('cryptoSymbol')}
               </span>
             </div>
 
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Address:</span>
               <span className="font-mono text-blue-400">
-                {new URLSearchParams(window.location.search).get('address')}
+                {searchParams.get('address')}
               </span>
             </div>
 
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Tokens:</span>
               <span className="font-mono text-green-400">
-                {new URLSearchParams(window.location.search).get('tokenAmount')} $TRUMP
+                {searchParams.get('tokenAmount')} $TRUMP
               </span>
             </div>
 
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Bonus Tokens:</span>
               <span className="font-mono text-purple-400">
-                +{new URLSearchParams(window.location.search).get('bonusAmount')} $TRUMP
+                +{searchParams.get('bonusAmount')} $TRUMP
               </span>
             </div>
 
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Total Tokens:</span>
               <span className="font-mono font-bold">
-                {new URLSearchParams(window.location.search).get('totalAmount')} $TRUMP
+                {searchParams.get('totalAmount')} $TRUMP
               </span>
             </div>
           </div>
@@ -105,7 +107,7 @@ export default function PaymentStatus() {
         </div>
 
         <button 
-          onClick={() => window.location.href = '/dashboard'} 
+          onClick={() => router.push('/dashboard')} 
           className="mt-8 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-3 rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all"
         >
           Back to Dashboard
